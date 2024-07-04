@@ -1,25 +1,42 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import React, { useState } from 'react';
+import MyNav from './components/myNav';
+import MyFooter from './components/myFooter';
+import Welcome from './components/welcome';
+import BookList from './components/BookList';
+import CommentArea from './components/CommentArea';
+import scifiBooks from './data/scifi.json';
+import { Container, Row, Col } from 'react-bootstrap';
 
-function App() {
+const App = () => {
+  const [selectedBookAsin, setSelectedBookAsin] = useState(null);
+
+  const handleBookSelect = (asin) => {
+    setSelectedBookAsin(asin);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <MyNav />
+      <Container>
+        <Welcome />
+        <Row>
+          <Col md={8}>
+            <BookList books={scifiBooks} onBookSelect={handleBookSelect} />
+          </Col>
+          <Col md={4}>
+            {selectedBookAsin ? (
+              <CommentArea asin={selectedBookAsin} />
+            ) : (
+              <div>Select a book to see comments</div>
+            )}
+          </Col>
+        </Row>
+      </Container>
+      <MyFooter />
+    </>
   );
-}
+};
 
 export default App;
